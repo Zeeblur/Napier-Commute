@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+repositories 
+{
+	mavenCentral()
+}
+
+sourceSets
+{
+    main
+	{
+		java
+		{
+			srcDirs = ['src']
+      }
+    }
+}
+
+jar
+{
+	manifest
+	{
+		attributes 'Main-Class': 'edu.napier.commute.Application'
+	}
+}
+
+mainClassName = 'edu.napier.commute.Application'
+
+
+dependencies {}
