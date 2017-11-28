@@ -1,5 +1,10 @@
 .gradle
 /build/
+/bin/
+/external/
+
+*.csv
+
 
 # Ignore Gradle GUI config
 gradle-app.setting
