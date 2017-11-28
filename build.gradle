@@ -1,10 +1,49 @@
+plugins {
+  id "org.ajoberstar.grgit" version "2.1.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'eclipse'
+apply plugin: 'org.ajoberstar.grgit'
 
-repositories 
-{
-	mavenCentral()
+
+import org.ajoberstar.grgit.*
+
+build {
+
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	
+    dependencies { 
+      compile  'org.ajoberstar:grgit:2.1.0'
+	  compile  files("external")
+	  compile fileTree(dir: 'external', include: ['/**/**/**/**/**/*.jar'])	 	  
+	  compile fileTree(dir: 'external', include: ['/**/**/*.jar'])	
+	  compile fileTree(dir: 'external/JCoord', include: ['/**/*.jar'])	
+	  compile fileTree(dir: 'external/NapierGeoTools.GraphHopper', include: ['/**/*.jar'])
+	  compile fileTree(dir: 'external/NapierGeoTools.Diary', include: ['/**/*.jar'])
+	  compile fileTree(dir: 'external/NapierGeoTools.common', include: ['/**/*.jar'])
+	}
+}
+
+
+task cloneGitRepo{
+	if (!file('external/NapierGeoTools.common').exists()){
+		def grgit = grgit.clone(dir: file('external'), uri: "https://github.com/NeilUrquhart/NapierGeowareTools.git")
+		
+	}
+	
+	if (!file('external/JCoord').exists()){
+		def grgit = grgit.clone(dir: file('external/JCoord'), uri: "https://github.com/xni06/JCoord.git")
+	}
+	// need to add a pull task to update
+}
+
+task cloneNew{
+		
 }
 
 sourceSets
@@ -13,8 +52,16 @@ sourceSets
 	{
 		java
 		{
-			srcDirs = ['src']
-      }
+			srcDirs = ['src',
+			  'external/NapierGeoTools.common/src',
+			  'external/NapierGeoTools.Diary/src',
+			  'external/JCoord/src',
+			  'external/NapierGeoTools.GraphHopper/src',
+			  'external/NapierGeoTools.KML/src',
+			  'external/NapierGeoTools.QueryOsm/src',
+			  'external/NapierGeoTools.Examples/src',
+			  'external/NapierGeoTools.TfL/src']}
+
     }
 }
 
@@ -22,7 +69,7 @@ jar
 {
 	manifest
 	{
-		attributes 'Main-Class': 'edu.napier.commute.Application'
+		attributes 'Main-Class': 'Application'
 	}
 }
 
