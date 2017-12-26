@@ -8,16 +8,47 @@ public class Application {
 		/*
 		 * Configure simlation
 		 */
+		
+		if (args.length < 2)
+		{
+			System.out.println("Command arguments not given");
+			return;
+		}
+		
+		// for quick results, 
+		char campus = args[0].charAt(0);
+		
+		int size = 0;
+		switch (campus)
+		{
+		case 'c':
+			size = 353;
+			break;
+		case 'm':
+			size = 65;
+		case 's':
+			size = 343;
+			break;
+		}
+		
+		String fileName = args[1];
+		
+		int days = 30;
+		
+		if (args.length == 3)
+		{
+			days = Integer.parseInt(args[2]);
+		}
 		SimParams params = SimParams.getInstance();
-		params.setDays(30);; //Run for 1 month
-		params.setDefaultCarParkSize (2);//For testing!
-		params.setDefaultBikeParkSize (2);//For testing!
+		params.setDays(days); //Run for 1 month
+		params.setDefaultCarParkSize (size);//For testing!
+		params.setDefaultBikeParkSize (20);//For testing!
 		
 		params.setOsmFile("./scotland-latest.osm.pbf");
 		params.setCarDirectory("./car/");
 		Simulator.init();
 		
-		ProblemReader pr = new ProblemReader("NapierBaseLine.csv");
+		ProblemReader pr = new ProblemReader(fileName + ".csv");
 		
 		
 		Simulator.run();
