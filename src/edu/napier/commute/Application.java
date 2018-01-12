@@ -12,14 +12,12 @@ public class Application {
 		params.setDays(30);; //Run for 1 month
 		params.setDefaultCarParkSize (2);//For testing!
 		params.setDefaultBikeParkSize (2);//For testing!
+
+		params.setOsmFile("./scotland-latest.osm");
+		params.setTLSdirectory("C:\\commuteData\\data\\tlsData");
 		
-		params.setOsmFile("./scotland-latest.osm.pbf");
-		params.setCarDirectory("./car/");
 		Simulator.init();
-		
-		ProblemReader pr = new ProblemReader("NapierBaseLine.csv");
-		
-		
+		ProblemReader pr = new ProblemReader("C:\\commuteData\\data\\problems\\NapierMerch.csv");
 		Simulator.run();
 		
 	}

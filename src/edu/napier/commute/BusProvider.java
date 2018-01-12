@@ -63,10 +63,10 @@ public class BusProvider extends TransportProvider {
 	protected void setup() {
 		TLSParser parser = new TLSParser();
 		
-		Path temp = Paths.get("tlsData");
+		Path temp = Paths.get(SimParams.getInstance().getTLSdirectory()/*"tlsData"*/);
 		//System.out.println("***" +temp);
 		
-		try (Stream<Path> paths = Files.walk(Paths.get("tlsData"))) {
+		try (Stream<Path> paths = Files.walk(Paths.get(SimParams.getInstance().getTLSdirectory()/*"tlsData"*/))) {
 			paths.forEach(filePath -> {
 				if (Files.isRegularFile(filePath)) {
 					System.out.println("Parsing TLS data " + filePath);

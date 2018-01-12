@@ -25,7 +25,7 @@ public class BikeProvider extends TransportProvider {
 
 				FlagEncoder car = gh.getEncoder(gh.BIKE);
 
-				FlagEncoder[] encoders = {car};
+				/*FlagEncoder[] encoders = {car};
 				options = gh.getOptionsMap();
 				options.put("pathToOSM", SimParams.getInstance().getOsmFile());
 				options.put("pathToFolder", folderPath);
@@ -34,7 +34,18 @@ public class BikeProvider extends TransportProvider {
 				options.put("enableCH",false);
 				options.put("maxVisitedNodes",1000000);
 				options.put("includeElevation", false);
-				options.put("algorithm",gh.DIJKSTRABI);
+				options.put("algorithm",gh.DIJKSTRABI);*/
+				FlagEncoder[] encoders = {car};
+				options = gh.getOptionsMap();
+				options.put("pathToOSM", SimParams.getInstance().getOsmFile());
+				options.put("pathToFolder", folderPath);
+				options.put("profilesForGraph",encoders);
+				options.put("profilesForRequest", car);
+				options.put("enableCH",false);
+				options.put("maxVisitedNodes",10000000);//extra 0
+				options.put("includeElevation", true);//true
+				options.put("algorithm",GHFacade.ASTAR);//gh.DIJKSTRABI);
+				options.put("weighting", GHFacade.FASTEST);//added
 	}
 
 
@@ -53,6 +64,7 @@ public class BikeProvider extends TransportProvider {
 		ArrayList<CJourney> options = new ArrayList<CJourney>();
 		for(Journey j : carOption) {
 			CJourney cj = new CJourney(j);
+			cj.setTravelTimeMS(cj.getTravelTimeMS() +1200000);//Add 20 mins to cover showering and changing
 			cj.setEmissions(params.getEmBike()* cj.getDistanceKM());
 			cj.setCost(params.getCostBike() * cj.getDistanceKM());
 			options.add(cj);

@@ -20,7 +20,7 @@ public class CarProvider extends TransportProvider {
 		gh = new GHFacade();
 		//Setup GraphHopper using the optionsMap	
 		//String osmfile = "scotland-latest.osm.pbf";
-		String folderPath = "./car/";
+		String folderPath = "./car"; //SimParams.getInstance().getCarDirectory();
 
 		FlagEncoder car = gh.getEncoder(gh.CAR);
 
@@ -31,9 +31,20 @@ public class CarProvider extends TransportProvider {
 		options.put("profilesForGraph",encoders);
 		options.put("profilesForRequest", car);
 		options.put("enableCH",false);
-		options.put("maxVisitedNodes",1000000);
-		options.put("includeElevation", false);
-		options.put("algorithm",gh.DIJKSTRABI);
+		options.put("maxVisitedNodes",10000000);//extra 0
+		options.put("includeElevation", true);//true
+		options.put("algorithm",GHFacade.ASTAR);//gh.DIJKSTRABI);
+		options.put("weighting", GHFacade.FASTEST);//added
+		
+		
+		/*
+		 * 	
+			
+		
+			ghOptions.put("weighting", GHFacade.FASTEST);
+			ghOptions.put("pathToOSM", osmPath);
+			ghOptions.put("pathToFolder", folderPath);
+		 */
 	}
 
 
@@ -57,6 +68,20 @@ public class CarProvider extends TransportProvider {
 			cj.setCost(params.getCostSmallCarOnePass() * cj.getDistanceKM());
 			options.add(cj);
 		}
+		
+		/*
+		 * GHJourney journey = null;
+			try {
+				journey = (GHJourney) facade.getJourney(origin, destination, ghOptions);
+				journey = facade.route(journey);
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.out.println("Origin = " + origin);
+				System.out.println("Destination = " + destination);
+
+				System.exit(-1);
+			}
+		 */
 
 		return options;
 	}

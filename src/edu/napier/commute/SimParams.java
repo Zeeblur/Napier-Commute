@@ -31,6 +31,7 @@ public class SimParams {
 	private String walkDirectory; //Folder used to store OSM data for walk
 	private int defaultCarParkSize;//Workplace parking capacity
 	private int defaultBikeParkSize;//Workplace parking capacity
+	private String TLSdirectory;//Location of TLS  XML file
 	
 	public enum direction  {IN, OUT};//Used to designate journeys IN to work or OUT from work
 	
@@ -44,6 +45,20 @@ public class SimParams {
 	
 	public int getDays() {
 		return days;
+	}
+
+
+
+
+	public String getTLSdirectory() {
+		return TLSdirectory;
+	}
+
+
+
+
+	public void setTLSdirectory(String tLSdirectory) {
+		TLSdirectory = tLSdirectory;
 	}
 
 

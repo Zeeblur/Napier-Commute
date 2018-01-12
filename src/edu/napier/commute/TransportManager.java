@@ -42,7 +42,6 @@ public class TransportManager {
 	   providerPool.put(TransportMode.BIKE, new BikeProvider());
 	   providerPool.put(TransportMode.WALK, new WalkProvider());
 	   
-	   
 	   for(TransportProvider tp: providerPool.values())
 		   tp.setup();
 	   /*

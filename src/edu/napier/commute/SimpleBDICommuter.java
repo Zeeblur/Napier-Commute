@@ -23,6 +23,7 @@ public class SimpleBDICommuter extends Commuter {
 	public void selectTravelOption(int day) {
 		//Select the travel option for the current day
 		
+		System.out.println("BDI day " +day);
 		//Create a request object 
 		CJourney requestIn = new CJourney(this.basicJourneyIn);
 		requestIn.setTime(this._workStart);
@@ -32,18 +33,18 @@ public class SimpleBDICommuter extends Commuter {
 		 * BDI code
 		 */
 		
-	
-	
-
 		if (day==0) {
 			maxPatience = rnd.nextInt(5) +5;
 			patience = maxPatience;
 
+			System.out.println("Patience "+ patience);
+			
 			// Get the best to and from journey for each mode
 			for (TransportMode mode : this.myModes) {
-				
+				System.out.println("Mode" +mode.toString());
 				// Set the mode, to and from journey, and the respective durations
 			
+				
 				CJourney optionTo = getCheapestOptionInTime(TransportManager.getOptions(requestIn, mode));
 				CJourney optionFrom= getCheapestOptionInTime(TransportManager.getOptions(requestOut, mode));
 				
@@ -60,8 +61,17 @@ public class SimpleBDICommuter extends Commuter {
 				beliefs.put(mode, new Double(totalTravelTime));
 			}
 
+			/*
+			 * 
+			 
+			System.out.println("Beliefs");
+			for (TransportMode m : beliefs.keySet()) {
+				System.out.println(m.toString() +":"+ beliefs.get(m));
+			}
 			//find quickest
 
+			System.out.println("Done");*/
+			
 			double bestTime = Double.MAX_VALUE;
 			for(TransportMode m: myModes) {
 				Double time = beliefs.get(m);
@@ -71,10 +81,7 @@ public class SimpleBDICommuter extends Commuter {
 						bestTime = time;
 					}
 				}
-
 			}
-
-
 		}
 		else {
 			//day > 0
@@ -82,61 +89,68 @@ public class SimpleBDICommuter extends Commuter {
 
 			//f = getFeedback
 			int penalty =0;
+			double newTime=beliefs.get(TransportMode.CAR);
+
 			if (myFeedback != null) {
 				for (Feedback df: myFeedback) {
 					System.out.println("Feedback - "+ this._description +": "+ df.getDescription());
 					// Check capacity constraints - do this here
-					double newTime=Double.MAX_VALUE;
-					
+
 					if(df.getType()==Feedback.Type.CAR_PARKINGCAPCITY) {
 						//Out of car park space
 						penalty = df.getTimePenaltyMins();
-						newTime = (penalty + beliefs.get(TransportMode.CAR));
+						newTime += penalty;
 
 					}
 					if(df.getType() == Feedback.Type.BIKE_PARKINGCAPACITY) {
 						//Out of car park space
 						penalty = df.getTimePenaltyMins();
-						newTime = (penalty + beliefs.get(TransportMode.BIKE));
+						newTime += penalty;
 
 					}
+				}
+				if (newTime  > beliefs.get(current) )//it's got worse!
+					patience --;
 
-					if (newTime  > beliefs.get(current) )//it's got worse!
-						patience --;
-
-					if (newTime < beliefs.get(current)   ) {//it's got better
+				if (newTime < beliefs.get(current)   ) {//it's got better
+					if (patience < maxPatience)
 						patience ++;
-					}
-					double bestTime = Double.MAX_VALUE;
+				}
+				
+				double bestTime = Double.MAX_VALUE;
 
+				for(TransportMode m : myModes) {
+					Double time = beliefs.get(m);
+					if (time != null)
+						if (time<bestTime)
+							bestTime = time;
+				}
+
+
+				if (newTime > bestTime)
+					patience --;
+
+				//Update beliefs
+				beliefs.put(current, new Double(newTime));
+
+
+				if (patience ==0) {
+					TransportMode oldCurrent = current; 
+					//change mode for next day!
+					bestTime = Double.MAX_VALUE;
 					for(TransportMode m : myModes) {
 						Double time = beliefs.get(m);
 						if (time != null)
-							if (time<bestTime)
+							if (time<bestTime) {
 								bestTime = time;
+								current = m;
+							}
 					}
-					
-
-					if (newTime > bestTime)
-						patience --;
-
-					//Update beliefs
-					beliefs.put(current, new Double(newTime));
-					
-
-					if (patience ==0) {
-						//change mode for next day!
-						bestTime = Double.MAX_VALUE;
-						for(TransportMode m : myModes) {
-							Double time = beliefs.get(m);
-							if (time != null)
-								if (time<bestTime) {
-									bestTime = time;
-									current = m;
-								}
-						}
+					if(oldCurrent != current) {
+						System.out.println("Mode switch!");
 					}
 				}
+
 			}
 
 
@@ -147,9 +161,6 @@ public class SimpleBDICommuter extends Commuter {
 
 
 			System.out.println("Commuter " + _id + "Travelling by " + current);
-
-
-
 			//For the moment assume the same mode is used IN and OUT
 			ArrayList<CJourney> tmp = TransportManager.getOptions(requestIn, current);
 			choiceIn = tmp.get(0);
@@ -169,9 +180,7 @@ public class SimpleBDICommuter extends Commuter {
 				TransportManager.addJourney(current, choiceOut, this, SimParams.direction.OUT);
 
 		}
-
 		
-
 
 	}
 
