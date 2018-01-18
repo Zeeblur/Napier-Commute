@@ -37,7 +37,7 @@ task cloneGitRepo{
 	}
 	
 	if (!file('external/JCoord').exists()){
-		def grgit = grgit.clone(dir: file('external/JCoord'), uri: "https://github.com/xni06/JCoord.git")
+		def grgit = grgit.clone(dir: file('external/JCoord'), uri: "https://github.com/Zoeoeh/JCoord.git")
 	}
 	// need to add a pull task to update
 }

@@ -40,8 +40,9 @@ public class Application {
 			days = Integer.parseInt(args[2]);
 		}
 		SimParams params = SimParams.getInstance();
-		params.setOsmFile("./scotland-latest.osm");
+		params.setOsmFile("./scotland-latest.osm.pbf");
 		params.setTLSdirectory("./tlsData");
+		params.setCarDirectory("./car/");
 
 		params.setDays(days); //Run for 1 month
 		params.setDefaultCarParkSize (size);//For testing!

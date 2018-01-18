@@ -24,7 +24,7 @@ public class GeoCoder {
 		// Create Cache
 		
 		try {
-			FileInputStream fis = new FileInputStream("C:\\commuteData\\postcodes\\postCodeCache.ser");
+			FileInputStream fis = new FileInputStream("./postcodes/postCodeCache.ser");
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			cache = (HashMap<String, Location>) ois.readObject();
 
@@ -53,7 +53,7 @@ public class GeoCoder {
 
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("C:\\commuteData\\postcodes\\postCodeCache.ser");
+			fos = new FileOutputStream("./postcodes/postCodeCache.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			Map<String, Location> mapToSave = new HashMap<String, Location>();
 
@@ -83,7 +83,7 @@ public class GeoCoder {
 		// (area.equals("HA")||area.equals("RM")||area.equals("CR")||area.equals("EN")||area.equals("IG")||area.equals("BR")||area.equals("SM")||area.equals("SE")||area.equals("SW")||area.equals("W")||area.equals("WC")||area.equals("EC")||area.equals("E")||area.equals("N")||area.equals("NW"))
 		// {area = "London";}
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("C:\\commuteData\\postcodes\\" + area + ".csv"));
+			BufferedReader reader = new BufferedReader(new FileReader("./postcodes/" + area + ".csv"));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (line.contains(postCode)) {
