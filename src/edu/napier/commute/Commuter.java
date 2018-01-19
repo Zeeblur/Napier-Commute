@@ -37,8 +37,18 @@ abstract class Commuter {
 		
 	}
 
-	public void addTransportMode(TransportMode mode) {
+	public boolean addTransportMode(TransportMode mode) {
 		myModes.add(mode);
+		
+		//Check to see if this mode is possible for this commuter
+		//Return false if it is not possible
+		CJourney request = new CJourney(this.basicJourneyIn);
+		request.setTime( LocalTime.of(0,0,0,0));
+		if (TransportManager.getOptions(request, mode).size() >0)
+			return true;
+		else
+			return false;
+		
 	}
 	abstract  void selectTravelOption(int day);//This method contains the selection logic
 	

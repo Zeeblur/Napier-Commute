@@ -9,6 +9,7 @@
 /car/
 /postcodes/
 *.pbf
+*.osm
 /tlsData/
 /walk/
 

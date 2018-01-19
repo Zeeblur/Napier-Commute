@@ -47,7 +47,7 @@ public class RailProvider extends TransportProvider {
 					
 					for (CJourney j : options) {
 						j.setCost(params.getCostTrainTicket());//Need data for this
-						j.setEmissions(j.getDistanceKM() * params.getCostBusDayTicket());
+						//j.setEmissions(j.getDistanceKM() * params.getCostBusDayTicket());
 						LocalTime serviceTime = request.getTime();
 						serviceTime = serviceTime.minusMinutes((int)Math.round(j.getTravelTimeMin()));
 						j.setTime(serviceTime);
