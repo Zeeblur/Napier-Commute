@@ -32,8 +32,8 @@ public class CarProvider extends TransportProvider {
 		options.put("profilesForRequest", car);
 		options.put("enableCH",false);
 		options.put("maxVisitedNodes",10000000);//extra 0
-		options.put("includeElevation", true);//true
-		options.put("algorithm",gh.DIJKSTRABI);   // changed back to dik
+		options.put("includeElevation", true); //  Configured dimension (3) is not equal to dimension of loaded graph (2) (trying to load a non elevated graph elevated)
+		options.put("algorithm", GHFacade.ASTAR); //gh.DIJKSTRABI);   // changed back to dik
 		options.put("weighting", GHFacade.FASTEST);//added
 		
 		

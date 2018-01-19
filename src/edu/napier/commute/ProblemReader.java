@@ -25,6 +25,10 @@ public class ProblemReader {
 	            		String data[] = readLine.split(",");
 	            		id ++;
 	            		
+	            		// addcatch for ,,,
+	            		if (data.length == 0)
+	            			continue;
+	            		
 	            		String desc = data[0];
 	            		String strHome = data[1];
 	            		String strWork= data[2];
