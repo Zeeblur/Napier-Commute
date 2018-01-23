@@ -26,6 +26,7 @@ public class Application {
 			break;
 		case 'm':
 			size = 65;
+			break;
 		case 's':
 			size = 343;
 			break;
