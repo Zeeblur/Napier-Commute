@@ -14,6 +14,7 @@ public class SimpleBDICommuter extends Commuter {
 	private Random rnd = new Random();
 	private HashMap<TransportMode, Double> beliefs = new HashMap<TransportMode, Double>();
 	private TransportMode current = null;
+	private double walkTime=-1;
 	
 	public SimpleBDICommuter(int id, String desc, String strHome, String strWork, LocalTime depHome, LocalTime depWork) {
 		
@@ -23,7 +24,7 @@ public class SimpleBDICommuter extends Commuter {
 	public void selectTravelOption(int day) {
 		//Select the travel option for the current day
 		
-		System.out.println("BDI day " +day);
+		System.out.println("BDI day " +day + "Commuter " + this._description);
 		//Create a request object 
 		CJourney requestIn = new CJourney(this.basicJourneyIn);
 		requestIn.setTime(this._workStart);
@@ -89,32 +90,16 @@ public class SimpleBDICommuter extends Commuter {
 
 			//f = getFeedback
 			int penalty =0;
-
-			double newTime = 0;
-
-			//newTime=beliefs.get(TransportMode.CAR);  // this assumes everyone has a car belief.
-
-			int type = 0;
-			
-			for(int i = 0; i < TransportMode.values().length; ++i)
-			{
-				if (newTime != 0)
-					break;
-				
-				try
-				{
-					newTime = beliefs.get(TransportMode.valueOf(type));
-				}
-				catch (Exception e)
-				{
-					// value not in list
-					// increment and loop
-					type++;
-				}
-			}
 			
 
+			double actualTime = beliefs.get(current);
+					
 			if (myFeedback != null) {
+				CJourney optionTo = getCheapestOptionInTime(TransportManager.getOptions(requestIn, current));
+				CJourney optionFrom= getCheapestOptionInTime(TransportManager.getOptions(requestOut, current));
+				optionTo.setTransportMode(current);
+				optionFrom.setTransportMode(current);	
+				actualTime = optionTo.getTravelTimeMin() + optionFrom.getTravelTimeMin();//Recalc time
 				for (Feedback df: myFeedback) {
 					System.out.println("Feedback - "+ this._description +": "+ df.getDescription());
 					// Check capacity constraints - do this here
@@ -122,25 +107,28 @@ public class SimpleBDICommuter extends Commuter {
 					if(df.getType()==Feedback.Type.CAR_PARKINGCAPCITY) {
 						//Out of car park space
 						penalty = df.getTimePenaltyMins();
-						newTime += penalty;
+						actualTime += penalty;
 
 					}
 					if(df.getType() == Feedback.Type.BIKE_PARKINGCAPACITY) {
 						//Out of car park space
 						penalty = df.getTimePenaltyMins();
-						newTime += penalty;
+						actualTime += penalty;
 
 					}
 				}
-				if (newTime  > beliefs.get(current) )//it's got worse!
+				if (actualTime  > beliefs.get(current) )//it's got worse!
 					patience --;
 
-				if (newTime < beliefs.get(current)   ) {//it's got better
+				if (actualTime < beliefs.get(current)   ) {//it's got better
 					if (patience < maxPatience)
 						patience ++;
 				}
 				
 				double bestTime = Double.MAX_VALUE;
+				
+				//Update beliefs
+				beliefs.put(current, new Double(actualTime));
 
 				for(TransportMode m : myModes) {
 					Double time = beliefs.get(m);
@@ -150,14 +138,13 @@ public class SimpleBDICommuter extends Commuter {
 				}
 
 
-				if (newTime > bestTime)
+				if (actualTime > bestTime)
 					patience --;
 
-				//Update beliefs
-				beliefs.put(current, new Double(newTime));
+				
+				
 
-
-				if (patience ==0) {
+				if (patience <=0) {
 					TransportMode oldCurrent = current; 
 					//change mode for next day!
 					bestTime = Double.MAX_VALUE;
@@ -172,25 +159,42 @@ public class SimpleBDICommuter extends Commuter {
 					if(oldCurrent != current) {
 						System.out.println("Mode switch!");
 					}
+					patience = maxPatience;
 				}
 
 			}
 
 
 		}
+		
+		//Walk selector
+		if (walkTime == -1) {
+			ArrayList<CJourney> ops =  TransportManager.getOptions(requestIn, TransportMode.WALK);
+			walkTime = ops.get(0).getTravelTimeMin();
+		}
 
+		SimParams params = SimParams.getInstance();
+		if (params.getWalkValue()> -1) {
+			double probToWalk =  1/(Math.pow(params.getWalkValue(),(walkTime/5)));
 
+			if (rnd.nextDouble()<probToWalk)
+				current = TransportMode.WALK;
+		}
+		if (walkTime < params.getWalkRadius())//If walk is less than a specified time then always walk
+			current = TransportMode.WALK;
+		
+		
 		if (current != null) {
 
 
-			System.out.println("Commuter " + _id + "Travelling by " + current);
+			System.out.println("Commuter " + this._description+ "Travelling by " + current);
 			//For the moment assume the same mode is used IN and OUT
 			ArrayList<CJourney> tmp = TransportManager.getOptions(requestIn, current);
 			choiceIn = tmp.get(0);
 			choiceIn.setCommuter(this);
 			choiceIn.setTransportMode(current);
 			this.modeIn = current;
-			
+			this.modeOut = current;
 			tmp = TransportManager.getOptions(requestOut, current);
 			choiceOut = tmp.get(0);
 			choiceOut.setTransportMode(current);

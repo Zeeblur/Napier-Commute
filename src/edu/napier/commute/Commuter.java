@@ -44,13 +44,31 @@ abstract class Commuter {
 		//Return false if it is not possible
 		CJourney request = new CJourney(this.basicJourneyIn);
 		request.setTime( LocalTime.of(0,0,0,0));
-		if (TransportManager.getOptions(request, mode).size() >0)
+		ArrayList<CJourney> options = TransportManager.getOptions(request, mode);
+		for (CJourney possible: options) {
+			System.out.println("Journey option,"+ this._description +","+mode +","+possible.getStartIdentifier()+","+possible.getEndIdentifier()+","+possible.cost+","+possible.emissions+","+possible.getTravelTimeMin());
+		}
+		if (options.size() >0)
 			return true;
 		else
 			return false;
 		
 	}
+	
+	
+	public TransportMode getModeIn() {
+		return modeIn;
+	}
+
+	public TransportMode getModeOut() {
+		return modeOut;
+	}
+
 	abstract  void selectTravelOption(int day);//This method contains the selection logic
+	
+	public void clearFeedback() {
+		myFeedback = null;
+	}
 	
 	public void setFeedBack(ArrayList<Feedback> feedback) {
 		//Set called after each day with feedback

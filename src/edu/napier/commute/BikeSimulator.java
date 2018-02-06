@@ -41,9 +41,9 @@ public class BikeSimulator extends TransportSimulator {
 	private void setCapacities() {
 		bikeParkCapacities.clear();
 		//Add car park capacities. This is temporary 
-		bikeParkCapacities.put("EH14 1DJ", new Integer(20));
-		bikeParkCapacities.put("EH10 5DT", new Integer(20));
-		bikeParkCapacities.put("EH11 4BN", new Integer(20));
+		bikeParkCapacities.put("EH14 1DJ", new Integer(30));
+		bikeParkCapacities.put("EH10 5DT", new Integer(30));
+		bikeParkCapacities.put("EH11 4BN", new Integer(30));
 	}
 	
 	@Override

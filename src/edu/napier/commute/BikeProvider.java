@@ -64,7 +64,7 @@ public class BikeProvider extends TransportProvider {
 		ArrayList<CJourney> options = new ArrayList<CJourney>();
 		for(Journey j : carOption) {
 			CJourney cj = new CJourney(j);
-			cj.setTravelTimeMS(cj.getTravelTimeMS() +1200000);//Add 20 mins to cover showering and changing
+			cj.setTravelTimeMS(cj.getTravelTimeMS() +600000);//Add 10 mins to cover showering and changing
 			cj.setEmissions(params.getEmBike()* cj.getDistanceKM());
 			cj.setCost(params.getCostBike() * cj.getDistanceKM());
 			options.add(cj);

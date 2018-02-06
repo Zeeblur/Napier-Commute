@@ -64,6 +64,7 @@ public class TransportManager {
 	}
 	
 	public static void generateFeedback() {
+		
 		for (TransportSimulator ts : simulatorPool.values())
 			ts.setFeedback();
 	}

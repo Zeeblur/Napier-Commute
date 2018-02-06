@@ -32,10 +32,10 @@ public class SimParams {
 	private int defaultCarParkSize;//Workplace parking capacity
 	private int defaultBikeParkSize;//Workplace parking capacity
 	private String TLSdirectory;//Location of TLS  XML file
-	
+	private String outFile; //Name of log file for result
 	public enum direction  {IN, OUT};//Used to designate journeys IN to work or OUT from work
-	
-	
+	private double walkValue=1.3; //Used to calculate the probability of walking. See Pollhill et. al
+	private int walkRadius = 0;// Radious for mandetaory walk
 	/*
 	 * Emission costs per kilometre
 	 * 
@@ -46,6 +46,55 @@ public class SimParams {
 	public int getDays() {
 		return days;
 	}
+
+	
+
+	
+
+	public double getWalkValue() {
+		return walkValue;
+	}
+
+
+
+
+
+	public void setWalkValue(double walkValue) {
+		this.walkValue = walkValue;
+	}
+
+
+
+
+
+	public int getWalkRadius() {
+		return walkRadius;
+	}
+
+
+
+
+
+	public void setWalkRadius(int walkRadius) {
+		this.walkRadius = walkRadius;
+	}
+
+
+
+
+
+	public String getOutFile() {
+		return outFile;
+	}
+
+
+
+
+
+	public void setOutFile(String outFile) {
+		this.outFile = outFile;
+	}
+
 
 
 

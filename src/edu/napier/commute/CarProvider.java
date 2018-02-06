@@ -67,6 +67,7 @@ public class CarProvider extends TransportProvider {
 			CJourney cj = new CJourney(j);
 			cj.setEmissions(params.getEmSmallCarOnePass() * cj.getDistanceKM());
 			cj.setCost(params.getCostSmallCarOnePass() * cj.getDistanceKM());
+			cj.setTravelTimeMS(cj.getTravelTimeMS()*3);//Factor of 3 for conjestion
 			options.add(cj);
 		}
 		
