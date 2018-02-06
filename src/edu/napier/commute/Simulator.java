@@ -1,6 +1,7 @@
 package edu.napier.commute;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,9 +46,12 @@ public class Simulator {
 		}	
 	}
 	
+	private static int logValue = 0;
+	
 	public static void writeResults(int day) {
 		BufferedWriter bw = null;
 		FileWriter fw = null;
+/*<<<<<<< HEAD
 		
 		try {
 
@@ -55,6 +59,36 @@ public class Simulator {
 			fw = new FileWriter(SimParams.getInstance().getOutFile(),false);
 			else
 				fw = new FileWriter(SimParams.getInstance().getOutFile(),true);
+=======*/
+
+		try
+		{
+			String fileName = SimParams.getInstance().getOutFile();
+			if (fileName.equals(""))
+				fileName = "SimLog";
+			
+			String ext = ".csv";
+            
+			
+			if(day==0)
+			{
+
+				// does the file already exist? if so, increment value
+				File temp = new File(fileName + logValue + ext);
+					
+				while (temp.isFile())
+				{
+					logValue++;
+					temp = new File(fileName + logValue + ext);
+				}
+				
+				fw = new FileWriter(fileName+logValue+ext,false);
+			}
+			else
+			{
+				fw = new FileWriter(fileName+logValue+ext,true);
+			}
+//>>>>>>> a21e2ffc5aadd6c3a4c6b3da043494e3450ad748
 			
 			bw = new BufferedWriter(fw);
 			if (day == 0) {//Write header

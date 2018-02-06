@@ -90,6 +90,40 @@ public class SimpleBDICommuter extends Commuter {
 
 			//f = getFeedback
 			int penalty =0;
+
+
+			double newTime = 0;
+
+			//newTime=beliefs.get(TransportMode.CAR);  // this assumes everyone has a car belief.
+
+			try
+			{
+				newTime=beliefs.get(current);
+			}
+			catch (Exception e)
+			{
+				// mode not viable
+				
+				int type = 0;
+
+				for(int i = 0; i < TransportMode.values().length; ++i)
+				{
+					if (newTime != 0)
+						break;
+
+					try
+					{
+						newTime = beliefs.get(TransportMode.valueOf(type));
+					}
+					catch (Exception e2)
+					{
+						// value not in list
+						// increment and loop
+						type++;
+					}
+				}
+			}
+
 			
 
 			double actualTime = beliefs.get(current);
