@@ -1,5 +1,3 @@
-package edu.napier.commute;
-
 import java.time.LocalTime;
 
 public class Application {

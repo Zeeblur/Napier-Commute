@@ -49,8 +49,8 @@ public class SimpleBDICommuter2 extends Commuter {
 				
 				// Set the mode, to and from journey, and the respective durations
 			
-				CJourney optionTo = getCheapestOptionInTime(TransportManager.getOptions(requestIn, mode));
-				CJourney optionFrom= getCheapestOptionInTime(TransportManager.getOptions(requestOut, mode));
+				CJourney optionTo = getCheapestOptionInTime(this.getTransportOptions(requestIn, mode));
+				CJourney optionFrom= getCheapestOptionInTime(this.getTransportOptions(requestOut, mode));
 				
 				if (optionTo == null || optionFrom == null)
 					continue;
@@ -153,10 +153,10 @@ public class SimpleBDICommuter2 extends Commuter {
 
 
 			//For the moment assume the same mode is used IN and OUT
-			ArrayList<CJourney> tmp = TransportManager.getOptions(requestIn, current.getTransportMode());
+			ArrayList<CJourney> tmp = this.getTransportOptions(requestIn, current.getTransportMode());
 			choiceIn = tmp.get(0);
 			choiceIn.setCommuter(this);
-			tmp = TransportManager.getOptions(requestOut, current.getTransportMode());
+			tmp = this.getTransportOptions(requestOut, current.getTransportMode());
 			choiceOut = tmp.get(0);
 			choiceOut.setCommuter(this);
 			

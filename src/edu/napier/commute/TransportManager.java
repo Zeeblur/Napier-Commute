@@ -13,22 +13,6 @@ public class TransportManager {
    * 
    */
 	
-	//This is the master list of valid transport modes
-	/*	public enum transportMode{CAR("car"),BUS("bus");
-			
-			// Member to hold the name
-			   private String string;
-
-			   // constructor to set the string
-			   transportMode(String name){string = name;}
-
-			   // the toString just returns the given name
-			   @Override
-			   public String toString() {
-			       return string;
-			   }
-		};  */
-	
 	private static HashMap<TransportMode,  TransportProvider> providerPool = new HashMap<TransportMode,TransportProvider>();
 	private static HashMap<TransportMode,  TransportSimulator> simulatorPool = new HashMap<TransportMode,TransportSimulator>();
 	
@@ -54,7 +38,7 @@ public class TransportManager {
 	   simulatorPool.put(TransportMode.WALK, new WalkSimulator());
 		}
 	
-	public static ArrayList<CJourney> getOptions(CJourney request, TransportMode tm) {
+	public static ArrayList<CJourney> getTransportOptions(CJourney request, TransportMode tm) {
 		TransportProvider tp = providerPool.get(tm);
 		return tp.getOptions(request);
 	}

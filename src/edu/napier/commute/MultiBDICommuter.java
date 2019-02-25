@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class SimpleBDICommuter extends Commuter {
+public class MultiBDICommuter extends Commuter {
 	/*
 	 * BDI code
 	 */
 	private int patience=0;
 	private int maxPatience =0;
 	private Random rnd = new Random();
-	private HashMap<TransportMode, Double> beliefs = new HashMap<TransportMode, Double>();
+	private HashMap<TransportMode, Double> beliefsTime = new HashMap<TransportMode, Double>();
+	private HashMap<TransportMode, Double> beliefsCO2 = new HashMap<TransportMode, Double>();
+	private HashMap<TransportMode, Double> beliefsCost = new HashMap<TransportMode, Double>();
+	
 	private TransportMode current = null;
 	private double walkTime=-1;
 	
-	public SimpleBDICommuter(int id, String desc, String strHome, String strWork, LocalTime depHome, LocalTime depWork) {
+	public MultiBDICommuter(int id, String desc, String strHome, String strWork, LocalTime depHome, LocalTime depWork) {
 		
 		super (id,desc,strHome,strWork,depHome, depWork) ;
 	}
@@ -59,7 +62,8 @@ public class SimpleBDICommuter extends Commuter {
 				double totalTravelTime = optionTo.getTravelTimeMin() + optionFrom.getTravelTimeMin();
 
 				// Add the option to the bestOptions map
-				beliefs.put(mode, new Double(totalTravelTime));
+				beliefsTime.put(mode, new Double(totalTravelTime));
+				
 			}
 
 			/*
@@ -75,7 +79,7 @@ public class SimpleBDICommuter extends Commuter {
 			
 			double bestTime = Double.MAX_VALUE;
 			for(TransportMode m: myModes) {
-				Double time = beliefs.get(m);
+				Double time = beliefsTime.get(m);
 				if (time != null) {
 					if ((current == null) || (time< bestTime)) {
 						current = m;
@@ -98,7 +102,7 @@ public class SimpleBDICommuter extends Commuter {
 
 			try
 			{
-				newTime=beliefs.get(current);
+				newTime=beliefsTime.get(current);
 			}
 			catch (Exception e)
 			{
@@ -113,7 +117,7 @@ public class SimpleBDICommuter extends Commuter {
 
 					try
 					{
-						newTime = beliefs.get(TransportMode.valueOf(type));
+						newTime = beliefsTime.get(TransportMode.valueOf(type));
 					}
 					catch (Exception e2)
 					{
@@ -126,7 +130,7 @@ public class SimpleBDICommuter extends Commuter {
 
 			
 
-			double actualTime = beliefs.get(current);
+			double actualTime = beliefsTime.get(current);
 					
 			if (myFeedback != null) {
 				CJourney optionTo = getCheapestOptionInTime(this.getTransportOptions(requestIn, current));
@@ -151,10 +155,10 @@ public class SimpleBDICommuter extends Commuter {
 
 					}
 				}
-				if (actualTime  > beliefs.get(current) )//it's got worse!
+				if (actualTime  > beliefsTime.get(current) )//it's got worse!
 					patience --;
 
-				if (actualTime < beliefs.get(current)   ) {//it's got better
+				if (actualTime < beliefsTime.get(current)   ) {//it's got better
 					if (patience < maxPatience)
 						patience ++;
 				}
@@ -162,10 +166,10 @@ public class SimpleBDICommuter extends Commuter {
 				double bestTime = Double.MAX_VALUE;
 				
 				//Update beliefs
-				beliefs.put(current, new Double(actualTime));
+				beliefsTime.put(current, new Double(actualTime));
 
 				for(TransportMode m : myModes) {
-					Double time = beliefs.get(m);
+					Double time = beliefsTime.get(m);
 					if (time != null)
 						if (time<bestTime)
 							bestTime = time;
@@ -183,7 +187,7 @@ public class SimpleBDICommuter extends Commuter {
 					//change mode for next day!
 					bestTime = Double.MAX_VALUE;
 					for(TransportMode m : myModes) {
-						Double time = beliefs.get(m);
+						Double time = beliefsTime.get(m);
 						if (time != null)
 							if (time<bestTime) {
 								bestTime = time;
