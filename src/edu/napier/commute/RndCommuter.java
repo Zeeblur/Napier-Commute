@@ -32,14 +32,14 @@ public class RndCommuter extends Commuter {
 
 		System.out.println("Commuter " + _id + "Travelling by " + myMode);
 		//Let's assume we always use the first option, if multuple options come back
-		choices = TransportManager.getOptions(requestIn, myMode);
+		choices = this.getTransportOptions(requestIn, myMode);
 		if (choices.size()>0) {
 			choiceIn = choices.get(0);
 			choiceIn.setCommuter(this);
 			modeIn = myMode;
 		}
 
-		choices = TransportManager.getOptions(requestOut, myMode);
+		choices = this.getTransportOptions(requestOut, myMode);
 		if (choices.size()>0) {
 			choiceOut = choices.get(0);
 			choiceOut.setCommuter(this);

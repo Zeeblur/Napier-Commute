@@ -25,6 +25,10 @@ public class ProblemReader {
 	            		String data[] = readLine.split(",");
 	            		id ++;
 	            		
+	            		// addcatch for ,,,
+	            		if (data.length == 0)
+	            			continue;
+	            		
 	            		String desc = data[0];
 	            		String strHome = data[1];
 	            		String strWork= data[2];
@@ -34,19 +38,23 @@ public class ProblemReader {
 	            		//Commuter c  = new RndCommuter(id, desc, strHome, strWork,  depHome, depWork);
 	            		
 	            		String travelModes = data[9];
-	            		
+	            		boolean viable = false;
 	            		if (travelModes.contains("Car"))
-	            			c.addTransportMode(TransportMode.CAR);
+	            			viable = c.addTransportMode(TransportMode.CAR);
 	            		if (travelModes.contains("Bus"))
-	            			c.addTransportMode(TransportMode.BUS);
+	            			viable = c.addTransportMode(TransportMode.BUS);
 	            		if (travelModes.contains("Rail"))
-	            			c.addTransportMode(TransportMode.RAIL);
+	            			viable = c.addTransportMode(TransportMode.RAIL);
 	            		if (travelModes.contains("Cycle"))
-	            			c.addTransportMode(TransportMode.BIKE);
+	            			viable = c.addTransportMode(TransportMode.BIKE);
 	            		if (travelModes.contains("Walk"))
-	            			c.addTransportMode(TransportMode.WALK);
+	            			viable = c.addTransportMode(TransportMode.WALK);
 	            		
-	            		Simulator.addCommuter(c);
+	            		if (viable)
+	            			Simulator.addCommuter(c);
+	            		else {
+	            			System.out.println("Commuter "+ c._id + " has no viable routes.");
+	            		}
 	            	}
 	            	if (readLine.startsWith("Employee,Home,Work,Start,End,Days,Type,canShareRoute,canJoinRoute,RoutingOptions"))
 	            		employeesSection = true;

@@ -20,7 +20,7 @@ public class CarProvider extends TransportProvider {
 		gh = new GHFacade();
 		//Setup GraphHopper using the optionsMap	
 		//String osmfile = "scotland-latest.osm.pbf";
-		String folderPath = "./car"; //SimParams.getInstance().getCarDirectory();
+		String folderPath = "./car/"; //SimParams.getInstance().getCarDirectory();
 
 		FlagEncoder car = gh.getEncoder(gh.CAR);
 
@@ -32,8 +32,8 @@ public class CarProvider extends TransportProvider {
 		options.put("profilesForRequest", car);
 		options.put("enableCH",false);
 		options.put("maxVisitedNodes",10000000);//extra 0
-		options.put("includeElevation", true);//true
-		options.put("algorithm",GHFacade.ASTAR);//gh.DIJKSTRABI);
+		options.put("includeElevation", true); //  Configured dimension (3) is not equal to dimension of loaded graph (2) (trying to load a non elevated graph elevated)
+		options.put("algorithm", GHFacade.ASTAR); //gh.DIJKSTRABI);   // changed back to dik
 		options.put("weighting", GHFacade.FASTEST);//added
 		
 		
@@ -58,6 +58,7 @@ public class CarProvider extends TransportProvider {
 		if (gh==null)//If first time calling...
 			init();//..initialise gHopper
 		
+		// need to check if returns null then handle?
 		Journey[] carOption = gh.getJourney(request.getPointA(), request.getPointB(), options);
 		
 		//Convert from Journey[] to ArrayLIst<CJouney>
@@ -66,6 +67,7 @@ public class CarProvider extends TransportProvider {
 			CJourney cj = new CJourney(j);
 			cj.setEmissions(params.getEmSmallCarOnePass() * cj.getDistanceKM());
 			cj.setCost(params.getCostSmallCarOnePass() * cj.getDistanceKM());
+			cj.setTravelTimeMS(cj.getTravelTimeMS()*3);//Factor of 3 for conjestion
 			options.add(cj);
 		}
 		

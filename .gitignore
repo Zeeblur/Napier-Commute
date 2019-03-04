@@ -5,6 +5,14 @@
 
 *.csv
 
+/bike/
+/car/
+/postcodes/
+*.pbf
+*.osm
+/tlsData/
+/walk/
+
 
 # Ignore Gradle GUI config
 gradle-app.setting

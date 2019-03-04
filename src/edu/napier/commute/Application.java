@@ -1,5 +1,3 @@
-package edu.napier.commute;
-
 import java.time.LocalTime;
 
 public class Application {
@@ -26,6 +24,7 @@ public class Application {
 			break;
 		case 'm':
 			size = 65;
+			break;
 		case 's':
 			size = 343;
 			break;
@@ -35,13 +34,32 @@ public class Application {
 		
 		int days = 30;
 		
-		if (args.length == 3)
+		if (args.length >= 3)
 		{
 			days = Integer.parseInt(args[2]);
 		}
+		
 		SimParams params = SimParams.getInstance();
-		params.setOsmFile("./scotland-latest.osm");
+		params.setOutFile("SimLog.csv");
+			if (args.length >= 4)
+			{
+				params.setOutFile(args[3]);
+			}
+			
+		
+			if (args.length >= 5)
+			{
+				params.setWalkRadius(Integer.parseInt(args[4]));
+			}
+			
+			if (args.length == 6)
+			{
+				params.setWalkValue(Double.parseDouble(args[5]));
+			}
+			
+		params.setOsmFile("./scotland-latest.osm.pbf");
 		params.setTLSdirectory("./tlsData");
+		params.setCarDirectory("./car/");
 
 		params.setDays(days); //Run for 1 month
 		params.setDefaultCarParkSize (size);//For testing!
