@@ -21,7 +21,7 @@ print ("Total Staff ANSWERED: {}".format(len(ALLstaffList)))
 # MERCHISTON STAFF ONLY
 staffList = []
 for mem in ALLstaffList :
-      if "Sighthill" in mem[22]:
+      if "Merchiston" in mem[22]:
             staffList.append(mem)
             
 print ("Total Sighthill Staff: {}".format(len(staffList)))
