@@ -13,13 +13,19 @@ This project uses gradle to pull and link external libraries. Tested with gradle
 Distribution Link:
 https://downloads.gradle.org/distributions/gradle-4.3.1-all.zip
 
-To build an eclipse project solution, Run:
+Run the command:
 
-`gradle eclipse`
+```$ gradle build```
+
+Alternatively, if you would like to build an eclipse project solution, Run:
+
+```$ gradle eclipse```
 
 ## Data
 Included is **testData.csv** showing an example of our problem files.
 
+The above **usefulData.py** script is an example of how we scraped our initial travel survey data. 
+
 ## Questions
 
-If you have any questions about how the above code works, please contact N.Urqhart@napier.ac.uk
+If you have any questions about how the above code works, please contact N.Urquhart@napier.ac.uk
